@@ -1,3 +1,5 @@
 <p align="center">
-  <img src="https://demolab.com..." alt="Terminal Typing" />
+  <a href="https://git.io">
+    <img src="https://demolab.com" alt="Typing Effect" />
+  </a>
 </p>
