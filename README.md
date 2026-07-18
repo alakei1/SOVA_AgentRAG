@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="https://demolab.com🔥+SUPER+PROJECT;🚀+Быстрый+и+мощный;💎+Красивый+интерфейс" alt="Multi-line Typing" />
+  <img src="https://demolab.com..." alt="Terminal Typing" />
 </p>
