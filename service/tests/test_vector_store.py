@@ -35,6 +35,8 @@ def mock_client():
             yield MockClient
 
 
+# ==================== Тесты инициализации ====================
+
 def test_init():
     """
     Проверяет, что конструктор VectorStore вызывает QdrantClient с правильными параметрами.
@@ -57,6 +59,8 @@ def test_init():
                 prefer_grpc=False,
             )
 
+
+# ==================== Тесты создания коллекции ====================
 
 def test_create_collection_new(mock_client):
     """
@@ -94,6 +98,8 @@ def test_create_collection_exists(mock_client):
     mock_client.return_value.create_payload_index.assert_not_called()
 
 
+# ==================== Тесты вставки/обновления точек ====================
+
 def test_upsert_points(mock_client):
     """
     Проверяет вставку/обновление точек.
@@ -120,13 +126,15 @@ def test_upsert_points(mock_client):
     assert kwargs["points"][1].payload == {}
 
 
+# ==================== Тесты поиска ====================
+
 def test_search(mock_client):
     """
     Проверяет поиск по вектору с фильтрацией и порогом оценки.
 
     Мокается ответ query_points, содержащий один ScoredPoint.
     Проверяется, что:
-    - Фильтр преобразуется в объект models.Filter.
+    - Фильтр преобразуется в объект models. Filter.
     - Передаются все параметры (collection_name, query, limit, score_threshold, with_payload).
     - Результат содержит ожидаемую точку.
     """
@@ -154,6 +162,8 @@ def test_search(mock_client):
     assert results[0].id == "1"
 
 
+# ==================== Тесты удаления точек ====================
+
 def test_delete_points(mock_client):
     """
     Проверяет удаление точек по списку ID.
@@ -169,6 +179,8 @@ def test_delete_points(mock_client):
     )
 
 
+# ==================== Тесты получения точек ====================
+
 def test_get_point_found(mock_client):
     """
     Проверяет получение существующей точки по ID.
@@ -177,13 +189,10 @@ def test_get_point_found(mock_client):
     Проверяется, что результат преобразован в словарь с ключами id, vector, payload
     (служебные поля игнорируются).
     """
-    mock_record = models.Record(
+    mock_record = models.PointStruct(
         id="1",
         vector=[0.1],
         payload={"x": 1},
-        version=0,
-        order_value=None,
-        shard_key=None,
     )
     mock_client.return_value.retrieve.return_value = [mock_record]
 
@@ -192,6 +201,8 @@ def test_get_point_found(mock_client):
     mock_client.return_value.retrieve.assert_called_once_with(
         collection_name="col", ids=["1"], with_payload=True
     )
+
+    assert result is not None
     assert result["id"] == "1"
     assert result["vector"] == [0.1]
     assert result["payload"] == {"x": 1}
