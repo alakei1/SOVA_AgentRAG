@@ -29,7 +29,16 @@ dependencies = [
     "rq>=2.0.0",
     "tenacity>=9.0.0",
     "python-dotenv>=1.0.1",
-    "minio>=7.2.20"
+    "minio>=7.2.20",
+    "openpyxl>=3.1.0",
+    "pandas>=2.2.0",
+    "rq-dashboard>=0.6.7",
+    "beautifulsoup4>=4.12.0",
+    "html2text>=2024.2.26",
+    "miniopy-async>=1.2.0",
+    "uvloop>=0.20.0",
+
+
 ]
 
 [dependency-groups]
@@ -51,7 +60,12 @@ addopts = "-ra -q --cov=service --cov-report=term-missing"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 asyncio_mode = "auto"
-# ДОБАВЛЕНО: регистрация кастомных маркеров
+
+
+filterwarnings = [
+    "ignore:.*WordPiece.__init__ will not create from files anymore.*:DeprecationWarning"
+]
+
 markers = [
     "integration: Интеграционные тесты, требующие внешних сервисов (Redis, Qdrant)",
     "benchmark: Тесты производительности",

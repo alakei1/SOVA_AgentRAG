@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
     DEEPSEEK_MODEL: str = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
     DEEPSEEK_BASE_URL: str = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+    DEEPSEEK_TIMEOUT : int = os.getenv("DEEPSEEK_TIMEOUT", "30")
 
     # ====== EMBEDDING MODEL (локальный или API) ======
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "sergeyzh/LaBSE-ru-sts")
@@ -54,6 +55,8 @@ class Settings(BaseSettings):
 
     # ====== CORS ======
     ALLOWED_ORIGINS: list[str] = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
+    LOCAL_CHUNKER_MODEL : str = "mistralai/Mistral-7B-Instruct-v0.2"
 
     @property
     def redis_url(self) -> str:

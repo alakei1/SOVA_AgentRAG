@@ -11,6 +11,7 @@ service/
 │   │   ├── __init__.py
 │   │   ├── auth.py
 │   │   ├── embedder.py
+|   |   ├── document_processor.py
 │   │   ├── vector_store.py
 │   │   ├── llm_client.py
 │   │   ├── chunker.py

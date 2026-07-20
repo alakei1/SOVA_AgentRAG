@@ -1,11 +1,10 @@
-import logging
+
 from typing import Any
 
 from qdrant_client import QdrantClient, models
 
 from service.utils.config import settings
-
-logger = logging.getLogger(__name__)
+from service.utils.log import logger
 
 
 class VectorStore:
