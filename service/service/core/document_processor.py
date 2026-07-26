@@ -124,3 +124,36 @@ class DocumentProcessor:
         except Exception as e:
             logger.error(f"Неожиданная ошибка при загрузке {file_path}: {e}", exc_info=True)
             return False
+
+    async def file_exists_in_minio(self, bucket_name: str, object_name: str) -> bool:
+        """
+        Проверяет существование файла в MinIO.
+        """
+        try:
+            await self.minio.stat_object(bucket_name, object_name)
+            return True
+        except MinioException as e:
+            # Если объект не найден, MinioException будет содержать соответствующий код
+            if e.code == "NoSuchKey":
+                return False
+            logger.error(f"Ошибка при проверке существования {object_name} в {bucket_name}: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"Неожиданная ошибка при проверке существования {object_name}: {e}")
+            return False
+
+    async def delete_file_from_minio(self, bucket_name: str, object_name: str) -> bool:
+        """
+        Удаляет файл из MinIO.
+        Возвращает True, если удаление прошло успешно, иначе False.
+        """
+        try:
+            await self.minio.remove_object(bucket_name, object_name)
+            logger.info(f"Файл {object_name} удалён из бакета {bucket_name}")
+            return True
+        except MinioException as e:
+            logger.error(f"Ошибка удаления {object_name} из {bucket_name}: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"Неожиданная ошибка при удалении {object_name}: {e}")
+            return False

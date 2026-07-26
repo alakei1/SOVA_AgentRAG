@@ -1,12 +1,18 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
 load_dotenv()
 
+ENV_PATH = Path(__file__).resolve().parents[3] / ".env"
 
+print(ENV_PATH)
 class Settings(BaseSettings):
+    model_config = {"env_file": ENV_PATH, "extra": "ignore"}
+
+
     # ======= API ========
     APP_NAME: str = "AI RAG Service"
     APP_VERSION: str = "1.0.0"
@@ -25,11 +31,17 @@ class Settings(BaseSettings):
     QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "knowledge")
     QDRANT_PREFER_GRPC : bool = os.getenv("QDRANT_PREFER_GRPC", "False").lower() == "true"
     # ====== MINIO (S3/файлы) ======
-    MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")  # без http://
+    # ====== MINIO (S3/файлы) ======
+    MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
     MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
     MINIO_SECURE: bool = os.getenv("MINIO_SECURE", "False").lower() == "true"
+    MINIO_URL: str = os.getenv("MINIO_URL", "localhost:9000")
 
+    #====== Chunker ======
+    CHUNK_SIZE: int = 500
+    CHUNK_OVERLAP: int = 50
+    CHUNK_SEPARATORS: list[str] = ["\n\n", "\n", ". ", " ", ""]
     # ====== REDIS (кэш) ======
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
     REDIS_PORT: int = int(os.getenv("REDIS_PORT", "6379"))
@@ -56,7 +68,7 @@ class Settings(BaseSettings):
     # ====== CORS ======
     ALLOWED_ORIGINS: list[str] = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
-    LOCAL_CHUNKER_MODEL : str = "mistralai/Mistral-7B-Instruct-v0.2"
+    LOCAL_CHUNKER_MODEL : str = "Qwen/Qwen2.5-3B-Instruct"
 
     @property
     def redis_url(self) -> str:

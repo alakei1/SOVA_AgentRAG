@@ -82,7 +82,7 @@ class Embedder:
         self.cache_ttl = cache_ttl
 
         if self.use_cache:
-            self.redis_client = redis.Redis(
+            self.redis_client = redis.from_url(
                 settings.redis_url, decode_responses=True
             )
             logger.info("Кеширование эмбеддингов  в Redis включено")

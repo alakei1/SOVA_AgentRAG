@@ -144,7 +144,6 @@ class LLMClient:
                     f"DeepSeek: {usage.get('prompt_tokens', 0)} prompt tokens, "
                     f"{usage.get('completion_tokens', 0)} completion tokens"
                 )
-
                 return answer
 
         except RetryError as e:

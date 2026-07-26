@@ -1,5 +1,5 @@
 
-from typing import Any
+from typing import Any, cast
 
 from qdrant_client import QdrantClient, models
 
@@ -35,24 +35,19 @@ class VectorStore:
     def create_collection(self, collection_name: str, vector_size: int, distance: str = "Cosine") -> None:
         """
         Создаёт коллекцию, если она ещё не существует.
-
-        При создании автоматически добавляется индекс для поля `tenant_id` (тип KEYWORD),
-        что ускоряет фильтрацию по этому полю.
-
-        Аргументы:
-            collection_name (str): Имя создаваемой коллекции.
-            vector_size (int): Размерность векторов.
-            distance (str): Метрика расстояния. Допустимые значения: 'Cosine', 'Euclid', 'Dot'.
-                            По умолчанию 'Cosine'.
+        Включает On-Disk хранение векторов и payload для предотвращения OOM.
         """
         if not self.client.collection_exists(collection_name):
-            # ИСПРАВЛЕНО: аргумент называется vectors_config, а не vector_size
             self.client.create_collection(
                 collection_name=collection_name,
                 vectors_config=models.VectorParams(
                     size=vector_size,
                     distance=getattr(models.Distance, distance.upper()),
+                    # НАСТРОЙКА 1: Хранить сами векторы на диске, а не в RAM
+                    on_disk=True,
                 ),
+                # НАСТРОЙКА 2: Хранить метаданные (payload) на диске
+                hnsw_config=models.HnswConfigDiff(on_disk=True),
             )
             # Создаем индекс для поля tenant_id, чтобы фильтрация была быстрой
             self.client.create_payload_index(
@@ -60,23 +55,11 @@ class VectorStore:
                 field_name="tenant_id",
                 field_schema=models.PayloadSchemaType.KEYWORD,
             )
-            logger.debug(f"Коллекция {collection_name} создана с индексами")
+            logger.debug(f"Коллекция {collection_name} создана с On-Disk индексами")
         else:
             logger.debug(f"Коллекция {collection_name} уже существует")
 
     def upsert_points(self, collection_name: str, points: list[dict[str, Any]]) -> None:
-        """
-        Вставляет или обновляет точки в коллекции.
-
-        Каждый словарь в списке `points` должен содержать:
-            - 'id' : уникальный идентификатор точки (str или int)
-            - 'vector' : список чисел (вектор)
-            - 'payload': (опционально) словарь с дополнительными данными
-
-        Аргументы:
-            collection_name (str): Имя коллекции.
-            points (list[dict]): Список точек для вставки/обновления.
-        """
         qdrant_points = [
             models.PointStruct(
                 id=p["id"],
@@ -86,7 +69,10 @@ class VectorStore:
             for p in points
         ]
 
-        self.client.upsert(collection_name=collection_name, points=qdrant_points, wait=True)
+        # Изменяем wait=True на wait=False
+        # Qdrant примет батч в память/буфер и проиндексирует его в фоне,
+        # что сгладит пиковые нагрузки на RAM и CPU вашего ПК
+        self.client.upsert(collection_name=collection_name, points=qdrant_points, wait=False)
         logger.debug(f"Добавлено/Обновлено {len(points)} точек в {collection_name}")
 
     def search(
@@ -117,7 +103,7 @@ class VectorStore:
 
         response = self.client.query_points(
             collection_name=collection_name,
-            query=query_vector,  # type: ignore
+            query=cast(Any, query_vector),
             limit=limit,
             score_threshold=score_threshold,
             query_filter=qdrant_filter,

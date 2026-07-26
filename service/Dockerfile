@@ -1,17 +1,17 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Копируем файлы зависимостей (pyproject.toml, uv.lock) из корня проекта
-COPY pyproject.toml uv.lock ./
 
-# Устанавливаем зависимости и сам пакет (editable)
-RUN uv sync --frozen --no-dev
+COPY service/pyproject.toml service/uv.lock ./
 
-# Копируем остальной код (включая папку service/)
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
+
+# 5. Копируем весь оставшийся код
 COPY . .
 
-# Запускаем приложение
-CMD ["uvicorn", "service.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "service.main:app", "--host", "0.0.0.0", "--port", "8000"]
