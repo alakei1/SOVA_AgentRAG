@@ -1,3 +1,11 @@
+#  ____   ___  _   _    _
+# / ___| / _ \| | | |  / \
+# \___ \| | | | | | | / _ \
+#  ___) | |_| |\ V / / ___ \
+# |____/ \___/  \_/ /_/   \_\
+#
+#    developer alakei1
+
 import os
 from pathlib import Path
 
@@ -31,7 +39,6 @@ class Settings(BaseSettings):
     QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "knowledge")
     QDRANT_PREFER_GRPC : bool = os.getenv("QDRANT_PREFER_GRPC", "False").lower() == "true"
     # ====== MINIO (S3/файлы) ======
-    # ====== MINIO (S3/файлы) ======
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
     MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
@@ -63,7 +70,7 @@ class Settings(BaseSettings):
     # ====== RAG ======
     CHUNK_SIZE: int = int(os.getenv("CHUNK_SIZE", "500"))
     CHUNK_OVERLAP: int = int(os.getenv("CHUNK_OVERLAP", "50"))
-    VECTOR_SIZE: int = int(os.getenv("VECTOR_SIZE", "768"))  # LaBSE-ru-sts
+    VECTOR_SIZE: int = int(os.getenv("VECTOR_SIZE", "768"))
 
     # ====== CORS ======
     ALLOWED_ORIGINS: list[str] = os.getenv("ALLOWED_ORIGINS", "*").split(",")

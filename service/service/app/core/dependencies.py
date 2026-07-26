@@ -1,8 +1,8 @@
 from functools import lru_cache
 
-from service.core.embedder import Embedder
-from service.core.llm_client import LLMClient
-from service.core.vector_store import VectorStore
+from service.rag.embedder import Embedder
+from service.rag.llm_client import LLMClient
+from service.rag.vector_store import VectorStore
 
 
 @lru_cache

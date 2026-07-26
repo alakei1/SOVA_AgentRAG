@@ -13,11 +13,11 @@ from typing import Any
 
 from qdrant_client.http import models
 
-#from service.core.ai_chunker import LocalChunker
-from service.core.chunker import TextChunker
-from service.core.embedder import Embedder
-from service.core.llm_client import LLMClient
-from service.core.vector_store import VectorStore
+#from service.rag.ai_chunker import LocalChunker
+from service.rag.chunker import TextChunker
+from service.rag.embedder import Embedder
+from service.rag.llm_client import LLMClient
+from service.rag.vector_store import VectorStore
 from service.utils.config import settings
 from service.utils.log import logger
 

@@ -17,7 +17,7 @@ import pytest
 import redis
 from sentence_transformers import SentenceTransformer
 
-from service.core.embedder import Embedder
+from service.rag.embedder import Embedder
 from service.utils.config import settings
 
 # ==================== Сессионная фикстура с моделью (загружается один раз) ====================
@@ -87,7 +87,7 @@ def embedder_with_cache(mock_redis_client, embedder_without_cache):
 
     Использует уже загруженную модель из сессионной фикстуры.
     """
-    with patch("service.core.embedder.redis.Redis.from_url", return_value=mock_redis_client):
+    with patch("service.rag.embedder.redis.Redis.from_url", return_value=mock_redis_client):
         embedder = Embedder(model_name="sergeyzh/LaBSE-ru-sts", use_cache=True)
         # Копируем уже загруженную модель
         embedder.model = embedder_without_cache.model

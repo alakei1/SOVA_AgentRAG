@@ -1,3 +1,11 @@
+#  ____   ___  _   _    _
+# / ___| / _ \| | | |  / \
+# \___ \| | | | | | | / _ \
+#  ___) | |_| |\ V / / ___ \
+# |____/ \___/  \_/ /_/   \_\
+#
+#    developer alakei1
+
 from contextlib import asynccontextmanager
 from typing import Any, cast
 
@@ -12,7 +20,15 @@ from service.utils.log import logger
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Действия при запуске приложения
-    logger.info("Starting RAG Service...")
+    logger.info(r"""
+ ____   ___  _   _    _
+/ ___| / _ \| | | |  / \
+\___ \| | | | | | | / _ \
+ ___) | |_| |\ V / / ___ \
+|____/ \___/  \_/ /_/   \_\
+
+  developer alakei1
+    """)
     yield
     # Действия при остановке приложения
     logger.info("Shutting down RAG Service...")

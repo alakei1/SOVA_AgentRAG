@@ -1,7 +1,7 @@
 from celery import Celery
 
-from service.core.document_processor import DocumentProcessor
-from service.core.rag_pipeline import RAGPipeline
+from service.rag.document_processor import DocumentProcessor
+from service.rag.rag_pipeline import RAGPipeline
 from service.utils.config import settings
 
 celery_app = Celery('tasks', broker=settings.REDIS_URL)

@@ -8,7 +8,7 @@
 
 from fastapi import APIRouter, Form
 
-from service.core.rag_pipeline import RAGPipeline
+from service.rag.rag_pipeline import RAGPipeline
 
 router = APIRouter()
 

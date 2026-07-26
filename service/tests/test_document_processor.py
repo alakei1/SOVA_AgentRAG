@@ -4,7 +4,7 @@ from unittest.mock import ANY, AsyncMock, MagicMock, patch
 import pytest
 from miniopy_async.error import MinioException
 
-from service.core.document_processor import DocumentProcessor
+from service.rag.document_processor import DocumentProcessor
 
 # -------------------- Фикстуры --------------------
 
@@ -12,7 +12,7 @@ from service.core.document_processor import DocumentProcessor
 @pytest.fixture
 def mock_minio():
     """Создаёт мок-объект MinIO с поддержкой асинхронности."""
-    with patch("service.core.document_processor.Minio") as mock:
+    with patch("service.rag.document_processor.Minio") as mock:
         minio_instance = AsyncMock()
         mock.return_value = minio_instance
         yield minio_instance
@@ -29,7 +29,7 @@ def mock_rag_pipeline():
 @pytest.fixture
 def processor(mock_minio):
     """Экземпляр DocumentProcessor с замоканным MinIO и настройками."""
-    with patch("service.core.document_processor.settings") as mock_settings:
+    with patch("service.rag.document_processor.settings") as mock_settings:
         mock_settings.MINIO_URL = "test-minio:9000"
         mock_settings.MINIO_ACCESS_KEY = "test-key"
         mock_settings.MINIO_SECRET_KEY = "test-secret"
@@ -43,7 +43,7 @@ def processor(mock_minio):
 
 def test_extract_text_from_bytes_pdf(processor):
     """Проверяет извлечение текста из PDF (через мок fitz)."""
-    with patch("service.core.document_processor.fitz") as mock_fitz:
+    with patch("service.rag.document_processor.fitz") as mock_fitz:
         mock_doc = MagicMock()
         mock_page1 = MagicMock()
         mock_page1.get_text.return_value = "Page 1 text\n"
@@ -60,7 +60,7 @@ def test_extract_text_from_bytes_pdf(processor):
 
 def test_extract_text_from_bytes_docx(processor):
     """Проверяет извлечение текста из DOCX (через мок Document)."""
-    with patch("service.core.document_processor.Document") as mock_document:
+    with patch("service.rag.document_processor.Document") as mock_document:
         # 1. Настраиваем фейковые параграфы для DOCX
         mock_paragraph1 = MagicMock()
         mock_paragraph1.text = "First paragraph"
@@ -92,7 +92,7 @@ def test_extract_text_from_bytes_unsupported(processor):
 
 def test_extract_text_from_bytes_exception(processor, caplog):
     """Проверяет обработку исключения при парсинге."""
-    with patch("service.core.document_processor.fitz.open", side_effect=Exception("PDF error")):
+    with patch("service.rag.document_processor.fitz.open", side_effect=Exception("PDF error")):
         result = processor._extract_text_from_bytes(b"data", ".pdf")
         assert result == ""
         assert "Ошибка парсинга" in caplog.text

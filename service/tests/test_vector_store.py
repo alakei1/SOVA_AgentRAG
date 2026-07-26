@@ -11,7 +11,7 @@ from unittest.mock import patch
 import pytest
 from qdrant_client import models
 
-from service.core.vector_store import VectorStore
+from service.rag.vector_store import VectorStore
 
 
 @pytest.fixture
@@ -20,14 +20,14 @@ def mock_client():
     Фикстура для подмены QdrantClient и настроек во всех тестах (кроме test_init).
 
     Мокает:
-    - QdrantClient в модуле service.core.vector_store,
+    - QdrantClient в модуле service.rag.vector_store,
     - объект settings с фиктивными значениями для всех переменных QDRANT_*.
 
     Возвращает класс-мок QdrantClient, через который можно управлять поведением
     экземпляра клиента (mock_client.return_value).
     """
-    with patch("service.core.vector_store.QdrantClient") as MockClient:
-        with patch("service.core.vector_store.settings") as mock_settings:
+    with patch("service.rag.vector_store.QdrantClient") as MockClient:
+        with patch("service.rag.vector_store.settings") as mock_settings:
             mock_settings.QDRANT_HOST = "localhost"
             mock_settings.QDRANT_PORT = 6333
             mock_settings.QDRANT_GRPC_PORT = 6334
@@ -44,8 +44,8 @@ def test_init():
     Использует собственные патчи, чтобы гарантировать изоляцию.
     Проверяет, что QdrantClient был вызван ровно один раз с ожидаемыми аргументами.
     """
-    with patch("service.core.vector_store.QdrantClient") as MockClient:
-        with patch("service.core.vector_store.settings") as mock_settings:
+    with patch("service.rag.vector_store.QdrantClient") as MockClient:
+        with patch("service.rag.vector_store.settings") as mock_settings:
             mock_settings.QDRANT_HOST = "localhost"
             mock_settings.QDRANT_PORT = 6333
             mock_settings.QDRANT_GRPC_PORT = 6334

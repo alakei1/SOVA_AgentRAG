@@ -1,6 +1,6 @@
 import asyncio
 
-from service.core.llm_client import get_llm_client
+from service.rag.llm_client import get_llm_client
 from service.utils.log import logger
 
 

@@ -3,16 +3,16 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from service.core.ai_chunker import LocalChunker
+from service.rag.ai_chunker import LocalChunker
 
 
 @pytest.fixture
 def mock_transformers():
     with (
-        patch("service.core.ai_chunker.AutoModelForCausalLM") as mock_model_cls,
-        patch("service.core.ai_chunker.AutoTokenizer") as mock_tokenizer_cls,
-        patch("service.core.ai_chunker.pipeline") as mock_pipeline,
-        patch("service.core.ai_chunker.logger"),
+        patch("service.rag.ai_chunker.AutoModelForCausalLM") as mock_model_cls,
+        patch("service.rag.ai_chunker.AutoTokenizer") as mock_tokenizer_cls,
+        patch("service.rag.ai_chunker.pipeline") as mock_pipeline,
+        patch("service.rag.ai_chunker.logger"),
     ):
         mock_tokenizer = MagicMock()
         mock_tokenizer.apply_chat_template.return_value = "formatted_prompt"

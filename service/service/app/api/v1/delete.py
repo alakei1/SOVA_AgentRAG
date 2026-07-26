@@ -8,12 +8,11 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, status
 
-from service.app.auth.dependencies import get_current_tenant
 from service.app.schemas import DocumentDeleteResponse, ErrorResponse
-from service.core.document_processor import DocumentProcessor
-from service.core.rag_pipeline import RAGPipeline
+from service.rag.document_processor import DocumentProcessor
+from service.rag.rag_pipeline import RAGPipeline
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 

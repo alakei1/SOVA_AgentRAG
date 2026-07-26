@@ -12,8 +12,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
-from service.core.document_processor import DocumentProcessor
-from service.core.rag_pipeline import RAGPipeline
+from service.rag.document_processor import DocumentProcessor
+from service.rag.rag_pipeline import RAGPipeline
 
 router = APIRouter()
 

@@ -1,3 +1,11 @@
+#  ____   ___  _   _    _
+# / ___| / _ \| | | |  / \
+# \___ \| | | | | | | / _ \
+#  ___) | |_| |\ V / / ___ \
+# |____/ \___/  \_/ /_/   \_\
+#
+#    developer alakei1
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from service.utils.config import settings
