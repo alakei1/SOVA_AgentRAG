@@ -19,7 +19,7 @@
   <a href="https://github.com/ваш_username/ваш_repo/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/ваш_username/ваш_repo?style=for-the-badge&logo=opensourceinitiative" alt="License" />
   </a>
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/Python-3.14%2B-blue?style=for-the-badge&logo=python" alt="Python" />
   <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Status" />
 </p>
 
